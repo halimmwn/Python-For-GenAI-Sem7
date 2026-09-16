@@ -1,0 +1,7 @@
+# Project dependencies
+# Python version target
+python==3.12.10
+
+# Libraries
+numpy
+pandas
