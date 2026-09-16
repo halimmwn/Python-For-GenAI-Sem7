@@ -5,3 +5,4 @@ python==3.12.10
 # Libraries
 numpy
 pandas
+httpx
