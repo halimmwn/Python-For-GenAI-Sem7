@@ -30,3 +30,5 @@ def flaky_api_call(prompt: str) -> str:
 	if random.random() < 0.6: # fails 60% of the time
 		raise ConnectionError("Simulated network error")
 	return f"Response to:{prompt}"
+
+print(flaky_api_call("Hello API"))

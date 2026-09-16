@@ -25,3 +25,14 @@ def get_api_key(provider: str) -> str:
 # In practice:
 # anthropic_key = get_api_key("anthropic")
 # openai_key = get_api_key("openai")
+
+
+if __name__ == "__main__":
+	print("Environment variables loaded successfully")
+	for provider, env_var in {
+		"anthropic": "ANTHROPIC_API_KEY",
+		"openai": "OPENAI_API_KEY",
+		"google": "GOOGLE_API_KEY",
+	}.items():
+		status = "available" if os.getenv(env_var) else "not configured"
+		print(f"{provider}: {status}")
