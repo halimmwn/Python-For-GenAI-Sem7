@@ -36,5 +36,5 @@ dist/
 .env
 .env/
 
-#File
+#Others
 *.pdf
