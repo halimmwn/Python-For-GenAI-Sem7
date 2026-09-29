@@ -1,6 +1,7 @@
 import os
-from openai import OpenAI
+
 from dotenv import load_dotenv
+from openai import OpenAI
 
 load_dotenv()
 
@@ -14,13 +15,13 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="openai/gpt-4o-mini",
+    model="openai/gpt-4o",
+    max_tokens=1024,
     messages=[
-        {"role": "user", "content": "What is retrieval-augmented generation?"}
-    ],
+        {"role": "system", "content": "You are a concise technical assistant."},
+        {"role": "user", "content": "What is the difference between RAG and fine-tuning?"}
+    ]
 )
 
 print(response.choices[0].message.content)
-# Usage stats
-print(f"Input tokens: {response.usage.prompt_tokens}")
-print(f"Output tokens: {response.usage.completion_tokens}")
+print(f"Tokens used: {response.usage.total_tokens}")
