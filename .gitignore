@@ -38,3 +38,5 @@ dist/
 
 #Others
 *.pdf
+*.ini
+*.db
