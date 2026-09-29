@@ -1,0 +1,9 @@
+{
+  "hello_world": {
+    "name": "hello_world",
+    "system": "You are a helpful bot.",
+    "user": "Say hello to {name}.",
+    "version": "1.0",
+    "last_eval_version": null
+  }
+}
