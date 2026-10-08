@@ -28,8 +28,7 @@ def describe_image_url(url: str) -> str:
 def describe_image_file(path: str) -> str:
     data = Path(path).read_bytes()
     b64 = base64.standard_b64encode(data).decode()
-    ext = Path(path).suffix.lstrip(".").lower()
-    media_type = f"image/{ext}" # image/png, image/jpeg, image/webp, image/gif
+    media_type = "image/jpeg"
     response = client.messages.create(
         model="qwen/qwen3-vl-plus:free",
         max_tokens=512,
@@ -47,5 +46,6 @@ def describe_image_file(path: str) -> str:
     return response.content[0].text
 
 # Usage:
-text = describe_image_url("https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Sunrise_over_the_sea.jpg/1280px-Sunrise_over_the_sea.jpg")
+image_path = Path(__file__).with_name("alhamdulillah.jpg")
+text = describe_image_file(str(image_path))
 print(text)

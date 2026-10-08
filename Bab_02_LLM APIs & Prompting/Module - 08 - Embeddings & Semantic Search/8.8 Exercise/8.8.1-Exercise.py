@@ -1,6 +1,7 @@
 import os
 import numpy as np
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Optional, List, Tuple
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -262,9 +263,39 @@ def embed_with_cache(texts: List[str], model: str = "text-embedding-3-small") ->
 if __name__ == "__main__":
     
     print("=== Exercise 1: DuplicateDetector ===")
-    corpus = [f"Generic document number {i}" for i in range(48)]
-    corpus.append("This is exactly the same as document 0")
-    corpus.append("Generic document number 0") # Duplicate of idx 0
+    db_path = Path(__file__).with_name("demam_berdarah.db")
+    
+    # Membuat/koneksi ke db dan membuat tabel jika belum ada
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS documents (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            content TEXT
+        )
+    ''')
+    
+    # Memasukkan teks ke dalam db jika masih kosong
+    c.execute('SELECT COUNT(*) FROM documents')
+    if c.fetchone()[0] == 0:
+        dbd_text = (
+            "Demam Berdarah Dengue (DBD) adalah penyakit yang disebabkan oleh infeksi virus "
+            "dengue dan ditularkan terutama melalui gigitan nyamuk Aedes aegypti dan Aedes "
+            "albopictus. Penyakit ini dapat menyebabkan demam tinggi dan pada kondisi berat "
+            "dapat menyebabkan perdarahan serta penurunan tekanan darah akibat kebocoran plasma."
+        )
+        # Memasukkan teks dua kali agar DuplicateDetector dapat menemukan duplikat
+        c.execute('INSERT INTO documents (content) VALUES (?)', (dbd_text,))
+        c.execute('INSERT INTO documents (content) VALUES (?)', (dbd_text,))
+        conn.commit()
+
+    # Load corpus dari db
+    c.execute('SELECT content FROM documents')
+    corpus = [row[0] for row in c.fetchall()]
+    conn.close()
+
+    print(f"Loaded {len(corpus)} documents from {db_path.name}")
+
     detector = DuplicateDetector(threshold=0.98)
     dups = detector.find_duplicates(corpus)
     print(f"Found {len(dups)} duplicate pairs.")
