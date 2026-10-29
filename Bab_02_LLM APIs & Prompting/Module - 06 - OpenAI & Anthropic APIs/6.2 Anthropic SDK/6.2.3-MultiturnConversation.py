@@ -5,14 +5,15 @@ client = anthropic.Anthropic(
     api_key=os.environ.get("XKIRO_API_KEY"),
     base_url="https://api.xkiro.com"
 )
-def chat(system: str) -> None:
-    """Simple interactive multi-turn chat loop."""
+def chat(system: str) -> list[dict]:
     history = []
     while True:
         user_input = input("You: ").strip()
         if user_input.lower() in ("exit", "quit"):
             break
+        
         history.append({"role": "user", "content": user_input})
+        
         response = client.messages.create(
             model="qwen/qwen3.7-flash:free",
             max_tokens=1024,
@@ -21,6 +22,10 @@ def chat(system: str) -> None:
         )
         assistant_text = response.content[0].text
         history.append({"role": "assistant", "content": assistant_text})
-        print(f"Claude:{assistant_text}\n")
+        print(f"Assistant: {assistant_text}\n")
+    
+    return history  # <-- Mengembalikan list history
 
-chat(system="You are a helpful Python tutor.")
+# Mengakses history setelah sesi selesai:
+chat_history = chat(system="You are a helpful Python tutor.")
+print(f"Total pesan tersimpan: {len(chat_history)}")
