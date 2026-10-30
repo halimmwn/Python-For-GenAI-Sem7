@@ -42,3 +42,5 @@ dist/
 *.db
 llama_index_store/
 chroma_db/
+lora_adapter/
+lora_output/
