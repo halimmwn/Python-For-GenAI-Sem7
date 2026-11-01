@@ -8,7 +8,7 @@ load_dotenv()
 
 # Configure global settings - applied to all indexes and query engines
 Settings.llm = OpenAI(
-    model="openai/gpt-4o-mini",
+    model="gpt-4o-mini",
     api_key=os.environ.get("OPENROUTER_API_KEY"),
     api_base="https://openrouter.ai/api/v1",
     temperature=0.1,
